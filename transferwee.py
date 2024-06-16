@@ -50,6 +50,7 @@ import time
 import urllib.parse
 
 import requests
+from tqdm import tqdm
 
 
 WETRANSFER_API_URL = "https://wetransfer.com/api/v4/transfers"
@@ -160,9 +161,12 @@ def download(url: str, file: str = "") -> None:
     r = requests.get(
         dl_url, headers={"User-Agent": WETRANSFER_USER_AGENT}, stream=True
     )
-    with open(file, "wb") as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            f.write(chunk)
+    total_size = int(r.headers.get("content-length", 0))
+    with tqdm(total=total_size, unit="B", unit_scale=True) as progress_bar:
+        with open(file, "wb") as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                f.write(chunk)
+                progress_bar.update(len(chunk))
 
 
 def _file_name_and_size(file: str) -> Dict[str, Union[int, str]]:
