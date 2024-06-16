@@ -107,4 +107,4 @@ MD5 (hello) = 59ca0efa9f5633cb0371bbc0355478d8
 
 ## Dependencies
 
-transferwee needs [requests](http://python-requests.org/) package.
+transferwee needs [requests](http://python-requests.org/) and tqdm package.
